@@ -1,0 +1,12 @@
+<section class="card">
+  <h2>Perfil</h2>
+  <p>Aquí podrás ver viajes guardados y editar tus planes en futuras versiones.</p>
+  <div *ngIf="savedTrips.length; else noTrips">
+    <ul>
+      <li *ngFor="let trip of savedTrips">{{ trip.destination }} - {{ trip.days }} días</li>
+    </ul>
+  </div>
+  <ng-template #noTrips>
+    <p>No hay viajes guardados todavía.</p>
+  </ng-template>
+</section>

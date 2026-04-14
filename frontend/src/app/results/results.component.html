@@ -1,0 +1,27 @@
+<section class="card">
+  <div *ngIf="result; else emptyState">
+    <h2>Itinerario para {{ result.destination }}</h2>
+    <p>Días: {{ result.days }} • Presupuesto total: €{{ result.budget }}</p>
+    <p>Presupuesto diario: €{{ result.daily_budget }}</p>
+
+    <div *ngFor="let day of result.itinerary" class="result-day">
+      <h3>Día {{ day.day }}</h3>
+      <ul>
+        <li *ngFor="let activity of day.activities">{{ activity }}</li>
+      </ul>
+      <p>Coste estimado: €{{ day.estimated_cost }}</p>
+    </div>
+
+    <div *ngIf="result.notes?.length">
+      <h3>Notas</h3>
+      <ul>
+        <li *ngFor="let note of result.notes">{{ note }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <ng-template #emptyState>
+    <h2>No hay itinerario generado</h2>
+    <p>Ve a <a routerLink="/planner">/planner</a> y crea tu viaje.</p>
+  </ng-template>
+</section>

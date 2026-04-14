@@ -1,0 +1,30 @@
+label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.65rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+}
+
+.error {
+  color: #c62828;
+  margin-top: 1rem;
+}
