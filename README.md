@@ -25,6 +25,13 @@ npm install
 npm start
 ```
 
+## Iniciar desde la raíz
+
+```bash
+npm install
+npm run start
+```
+
 ## API principal
 
 - `GET /api/health` verifica el backend.

@@ -31,5 +31,8 @@
       }
     }
   },
-  "defaultProject": "viaja-sencillo"
+  "defaultProject": "viaja-sencillo",
+  "cli": {
+    "analytics": "29a25f24-f32d-4a1c-aa02-4b085661a1a8"
+  }
 }

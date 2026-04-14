@@ -36,7 +36,9 @@ export class PlannerComponent implements OnInit {
   submit() {
     this.error = '';
     this.loading = true;
-    const interests = Object.keys(this.interests).filter((key) => this.interests[key]);
+    const interests = (Object.keys(this.interests) as Array<keyof typeof this.interests>).filter(
+      (key) => this.interests[key],
+    );
     const request: PlannerRequest = {
       destination: this.destination,
       start_date: this.start_date,
