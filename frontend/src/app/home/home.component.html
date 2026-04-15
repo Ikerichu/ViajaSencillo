@@ -1,5 +1,37 @@
-<section class="card">
-  <h2>Planner de viaje inteligente</h2>
-  <p>Define tu destino, fecha, presupuesto e intereses. Nosotros armamos un itinerario optimizado.</p>
-  <button (click)="goToPlanner()">Crear viaje</button>
+<section class="hero card">
+  <div class="hero-copy">
+    <p class="eyebrow">ViajaSencillo</p>
+    <h1>Tu viaje perfecto en segundos</h1>
+    <p>Genera rutas inteligentes, controla tu presupuesto y descubre los mejores planes según tus intereses.</p>
+    <button (click)="goToPlanner()">Crear viaje ahora</button>
+  </div>
+  <div class="hero-preview">
+    <div class="hero-box">
+      <h3>Itinerario de muestra</h3>
+      <ul>
+        <li>Día 1: Museo, parque y cena local</li>
+        <li>Día 2: Mercado gastronómico, paseo y noche cultural</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="card features">
+  <h2>Qué hace tu planner</h2>
+  <div class="feature-grid">
+    <article class="feature-card" *ngFor="let feature of features">
+      <h3>{{ feature.title }}</h3>
+      <p>{{ feature.description }}</p>
+    </article>
+  </div>
+</section>
+
+<section class="card destinations">
+  <h2>Destinos disponibles</h2>
+  <p *ngIf="loading">Cargando destinos...</p>
+  <p *ngIf="error" class="error">{{ error }}</p>
+  <ul *ngIf="destinations.length">
+    <li *ngFor="let destination of destinations">{{ destination }}</li>
+  </ul>
+  <p *ngIf="!loading && !destinations.length && !error">Pronto habrá más destinos disponibles.</p>
 </section>

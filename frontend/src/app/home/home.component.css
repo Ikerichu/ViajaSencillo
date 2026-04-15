@@ -1,3 +1,68 @@
 section {
+  padding: 1.5rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.hero-copy .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #1a73e8;
+  margin-bottom: 0.75rem;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.hero-copy p {
+  line-height: 1.7;
+  margin: 1rem 0;
+}
+
+.hero-preview {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-box {
+  background: #eef4ff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(26, 115, 232, 0.12);
+}
+
+.hero-box h3 {
+  margin-top: 0;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.feature-card {
+  background: #f9fbff;
+  border-radius: 16px;
   padding: 1rem;
+  border: 1px solid rgba(26, 115, 232, 0.1);
+}
+
+.destinations ul {
+  padding-left: 1.25rem;
+}
+
+.destinations .error {
+  color: #b00020;
+}
+
+button {
+  margin-top: 1rem;
 }
