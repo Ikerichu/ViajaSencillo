@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class PlannerRequest(BaseModel):
     destination: str
@@ -22,6 +22,18 @@ class PlannerResponse(BaseModel):
     itinerary: List[ItineraryDay]
     notes: List[str]
 
+class UserCreate(BaseModel):
+    name: str
+    email: EmailStr
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+
+    class Config:
+        orm_mode = True
+
 class SavedTripCreate(BaseModel):
     destination: str
     start_date: date
@@ -32,6 +44,7 @@ class SavedTripCreate(BaseModel):
 
 class SavedTripResponse(BaseModel):
     id: int
+    user_id: int
     destination: str
     start_date: date
     end_date: date

@@ -3,8 +3,25 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 
-def create_saved_trip(db: Session, trip: schemas.SavedTripCreate) -> models.SavedTrip:
+def create_user(db: Session, user: schemas.UserCreate) -> models.User:
+    db_user = models.User(name=user.name, email=user.email)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
+
+def get_user(db: Session, user_id: int):
+    return db.query(models.User).filter(models.User.id == user_id).first()
+
+
+def create_saved_trip(db: Session, user_id: int, trip: schemas.SavedTripCreate) -> models.SavedTrip:
     db_trip = models.SavedTrip(
+        user_id=user_id,
         destination=trip.destination,
         start_date=trip.start_date,
         end_date=trip.end_date,
@@ -18,5 +35,11 @@ def create_saved_trip(db: Session, trip: schemas.SavedTripCreate) -> models.Save
     return db_trip
 
 
-def get_saved_trips(db: Session, skip: int = 0, limit: int = 20):
-    return db.query(models.SavedTrip).offset(skip).limit(limit).all()
+def get_saved_trips(db: Session, user_id: int, skip: int = 0, limit: int = 20):
+    return (
+        db.query(models.SavedTrip)
+        .filter(models.SavedTrip.user_id == user_id)
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )

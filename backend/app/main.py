@@ -3,10 +3,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 
-from .schemas import PlannerRequest, PlannerResponse, SavedTripCreate, SavedTripResponse
+from .schemas import (
+    PlannerRequest,
+    PlannerResponse,
+    SavedTripCreate,
+    SavedTripResponse,
+    UserCreate,
+    UserResponse,
+)
 from .dataset import DESTINATIONS, get_places
 from .itinerary import make_itinerary
-from .crud import create_saved_trip, get_saved_trips
+from .crud import (
+    create_saved_trip,
+    get_saved_trips,
+    create_user,
+    get_user,
+    get_user_by_email,
+)
 from .database import engine, get_db
 from .models import Base
 
@@ -56,10 +69,30 @@ def generate_planner(request: PlannerRequest):
         notes=notes,
     )
 
-@app.post("/api/trips", response_model=SavedTripResponse)
-def save_trip(trip: SavedTripCreate, db: Session = Depends(get_db)):
-    return create_saved_trip(db, trip)
+@app.post("/api/users", response_model=UserResponse)
+def create_user_endpoint(user: UserCreate, db: Session = Depends(get_db)):
+    existing_user = get_user_by_email(db, user.email)
+    if existing_user:
+        raise HTTPException(status_code=400, detail="El usuario ya existe")
+    return create_user(db, user)
 
-@app.get("/api/trips", response_model=List[SavedTripResponse])
-def read_saved_trips(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
-    return get_saved_trips(db, skip=skip, limit=limit)
+@app.get("/api/users/{user_id}", response_model=UserResponse)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user = get_user(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return user
+
+@app.post("/api/users/{user_id}/trips", response_model=SavedTripResponse)
+def save_trip(user_id: int, trip: SavedTripCreate, db: Session = Depends(get_db)):
+    user = get_user(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return create_saved_trip(db, user_id, trip)
+
+@app.get("/api/users/{user_id}/trips", response_model=List[SavedTripResponse])
+def read_saved_trips(user_id: int, skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
+    user = get_user(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return get_saved_trips(db, user_id=user_id, skip=skip, limit=limit)
