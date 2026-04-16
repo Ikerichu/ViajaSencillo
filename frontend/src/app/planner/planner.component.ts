@@ -49,8 +49,32 @@ export class PlannerComponent implements OnInit {
 
     this.api.generatePlanner(request).subscribe(
       (result) => {
-        localStorage.setItem('plannerResult', JSON.stringify(result));
-        this.router.navigate(['/results']);
+        const storedResult: any = { ...result, savedMessage: '', saved: false };
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+        if (currentUser) {
+          const tripPayload = {
+            ...request,
+            itinerary: result.itinerary,
+          };
+
+          this.api.saveTrip(currentUser.id, tripPayload).subscribe(
+            () => {
+              storedResult.saved = true;
+              storedResult.savedMessage = 'Viaje guardado para el usuario ' + currentUser.name;
+              localStorage.setItem('plannerResult', JSON.stringify(storedResult));
+              this.router.navigate(['/results']);
+            },
+            () => {
+              storedResult.savedMessage = 'No se pudo guardar el viaje en el servidor.';
+              localStorage.setItem('plannerResult', JSON.stringify(storedResult));
+              this.router.navigate(['/results']);
+            },
+          );
+        } else {
+          localStorage.setItem('plannerResult', JSON.stringify(storedResult));
+          this.router.navigate(['/results']);
+        }
       },
       (err) => {
         this.error = err?.error?.detail || 'No se pudo generar el itinerario';

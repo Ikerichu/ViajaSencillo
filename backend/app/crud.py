@@ -1,10 +1,19 @@
+import hashlib
 from sqlalchemy.orm import Session
 
 from . import models, schemas
 
 
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+
 def create_user(db: Session, user: schemas.UserCreate) -> models.User:
-    db_user = models.User(name=user.name, email=user.email)
+    db_user = models.User(
+        name=user.name,
+        email=user.email,
+        password=hash_password(user.password),
+    )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)

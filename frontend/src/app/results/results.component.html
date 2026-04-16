@@ -4,6 +4,10 @@
     <p>Días: {{ result.days }} • Presupuesto total: €{{ result.budget }}</p>
     <p>Presupuesto diario: €{{ result.daily_budget }}</p>
 
+    <div *ngIf="result.savedMessage" class="save-notice">
+      {{ result.savedMessage }}
+    </div>
+
     <div *ngFor="let day of result.itinerary" class="result-day">
       <h3>Día {{ day.day }}</h3>
       <ul>

@@ -1,12 +1,38 @@
 <section class="card">
   <h2>Perfil</h2>
-  <p>Aquí podrás ver viajes guardados y editar tus planes en futuras versiones.</p>
-  <div *ngIf="savedTrips.length; else noTrips">
-    <ul>
-      <li *ngFor="let trip of savedTrips">{{ trip.destination }} - {{ trip.days }} días</li>
-    </ul>
+
+  <div *ngIf="currentUser; else signupForm">
+    <p>Bienvenido, <strong>{{ currentUser.name }}</strong> (<em>{{ currentUser.email }}</em>)</p>
+    <button type="button" (click)="logout()">Cerrar sesión</button>
+
+    <section class="saved-trips">
+      <h3>Viajes guardados</h3>
+      <p *ngIf="loading">Cargando viajes...</p>
+      <p *ngIf="!loading && error" class="error">{{ error }}</p>
+      <ul *ngIf="!loading && trips.length">
+        <li *ngFor="let trip of trips">{{ trip.destination }} - {{ trip.days }} días</li>
+      </ul>
+      <p *ngIf="!loading && !trips.length && !error">No hay viajes guardados todavía.</p>
+    </section>
   </div>
-  <ng-template #noTrips>
-    <p>No hay viajes guardados todavía.</p>
+
+  <ng-template #signupForm>
+    <p>Crea tu usuario para guardar tus viajes y verlos en el perfil.</p>
+    <form (ngSubmit)="submit()">
+      <label>
+        Nombre
+        <input [(ngModel)]="userForm.name" name="name" required />
+      </label>
+      <label>
+        Email
+        <input [(ngModel)]="userForm.email" name="email" type="email" required />
+      </label>
+      <label>
+        Contraseña
+        <input [(ngModel)]="userForm.password" name="password" type="password" required />
+      </label>
+      <button type="submit" [disabled]="loading">Crear usuario</button>
+      <p *ngIf="error" class="error">{{ error }}</p>
+    </form>
   </ng-template>
 </section>
