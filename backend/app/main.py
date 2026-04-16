@@ -1,10 +1,16 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 from typing import List
 
-from .schemas import PlannerRequest, PlannerResponse, ItineraryDay
+from .schemas import PlannerRequest, PlannerResponse, SavedTripCreate, SavedTripResponse
 from .dataset import DESTINATIONS, get_places
 from .itinerary import make_itinerary
+from .crud import create_saved_trip, get_saved_trips
+from .database import engine, get_db
+from .models import Base
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="ViajaSencillo API", version="0.1.0")
 
@@ -49,3 +55,11 @@ def generate_planner(request: PlannerRequest):
         itinerary=itinerary,
         notes=notes,
     )
+
+@app.post("/api/trips", response_model=SavedTripResponse)
+def save_trip(trip: SavedTripCreate, db: Session = Depends(get_db)):
+    return create_saved_trip(db, trip)
+
+@app.get("/api/trips", response_model=List[SavedTripResponse])
+def read_saved_trips(skip: int = 0, limit: int = 20, db: Session = Depends(get_db)):
+    return get_saved_trips(db, skip=skip, limit=limit)

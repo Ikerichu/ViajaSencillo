@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from typing import List
 from pydantic import BaseModel
 
@@ -21,3 +21,24 @@ class PlannerResponse(BaseModel):
     daily_budget: float
     itinerary: List[ItineraryDay]
     notes: List[str]
+
+class SavedTripCreate(BaseModel):
+    destination: str
+    start_date: date
+    end_date: date
+    budget: float
+    interests: List[str]
+    itinerary: List[ItineraryDay]
+
+class SavedTripResponse(BaseModel):
+    id: int
+    destination: str
+    start_date: date
+    end_date: date
+    budget: float
+    interests: List[str]
+    itinerary: List[ItineraryDay]
+    created_at: datetime
+
+    class Config:
+        orm_mode = True
