@@ -52,13 +52,13 @@ export class PlannerComponent implements OnInit {
         const storedResult: any = { ...result, savedMessage: '', saved: false };
         const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
-        if (currentUser) {
+        if (currentUser && currentUser.token) {
           const tripPayload = {
             ...request,
             itinerary: result.itinerary,
           };
 
-          this.api.saveTrip(currentUser.id, tripPayload).subscribe(
+          this.api.saveTrip(tripPayload, currentUser.token).subscribe(
             () => {
               storedResult.saved = true;
               storedResult.savedMessage = 'Viaje guardado para el usuario ' + currentUser.name;

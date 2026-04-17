@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService, UserCreate } from '../services/api.service';
+import { ApiService, LoginResponse, UserCreate } from '../services/api.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,6 +11,7 @@ export class ProfileComponent implements OnInit {
   trips: any[] = [];
   loading = false;
   error = '';
+  authMode: 'login' | 'register' = 'login';
   userForm: UserCreate = {
     name: '',
     email: '',
@@ -28,11 +29,11 @@ export class ProfileComponent implements OnInit {
   }
 
   fetchTrips() {
-    if (!this.currentUser) {
+    if (!this.currentUser?.token) {
       return;
     }
     this.loading = true;
-    this.api.getUserTrips(this.currentUser.id).subscribe(
+    this.api.getUserTrips(this.currentUser.token).subscribe(
       (trips) => {
         this.trips = trips;
         this.loading = false;
@@ -44,18 +45,42 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  toggleMode() {
+    this.authMode = this.authMode === 'login' ? 'register' : 'login';
+    this.error = '';
+  }
+
   submit() {
     this.error = '';
     this.loading = true;
-    this.api.createUser(this.userForm).subscribe(
-      (user) => {
-        this.currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(user));
+
+    if (this.authMode === 'register') {
+      this.api.createUser(this.userForm).subscribe(
+        () => {
+          this.apiLogin();
+        },
+        (err) => {
+          this.error = err?.error?.detail || 'No se pudo crear el usuario';
+          this.loading = false;
+        },
+      );
+    } else {
+      this.apiLogin();
+    }
+  }
+
+  apiLogin() {
+    this.api.login(this.userForm.email, this.userForm.password).subscribe(
+      (response: LoginResponse) => {
+        this.currentUser = { ...response.user, token: response.access_token };
+        localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
         this.userForm = { name: '', email: '', password: '' };
+        this.error = '';
         this.fetchTrips();
+        this.loading = false;
       },
       (err) => {
-        this.error = err?.error?.detail || 'No se pudo crear el usuario';
+        this.error = err?.error?.detail || 'No se pudo iniciar sesión';
         this.loading = false;
       },
     );

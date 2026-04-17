@@ -1,7 +1,7 @@
 <section class="card">
   <h2>Perfil</h2>
 
-  <div *ngIf="currentUser; else signupForm">
+  <div *ngIf="currentUser; else authForm">
     <p>Bienvenido, <strong>{{ currentUser.name }}</strong> (<em>{{ currentUser.email }}</em>)</p>
     <button type="button" (click)="logout()">Cerrar sesión</button>
 
@@ -16,10 +16,11 @@
     </section>
   </div>
 
-  <ng-template #signupForm>
-    <p>Crea tu usuario para guardar tus viajes y verlos en el perfil.</p>
+  <ng-template #authForm>
+    <p *ngIf="authMode === 'login'">Inicia sesión para guardar tus viajes y verlos en tu perfil.</p>
+    <p *ngIf="authMode === 'register'">Regístrate para crear tu cuenta y comenzar a guardar viajes.</p>
     <form (ngSubmit)="submit()">
-      <label>
+      <label *ngIf="authMode === 'register'">
         Nombre
         <input [(ngModel)]="userForm.name" name="name" required />
       </label>
@@ -31,8 +32,13 @@
         Contraseña
         <input [(ngModel)]="userForm.password" name="password" type="password" required />
       </label>
-      <button type="submit" [disabled]="loading">Crear usuario</button>
+      <button type="submit" [disabled]="loading">
+        {{ authMode === 'login' ? 'Iniciar sesión' : 'Registrarse' }}
+      </button>
       <p *ngIf="error" class="error">{{ error }}</p>
     </form>
+    <button type="button" (click)="toggleMode()">
+      {{ authMode === 'login' ? 'Crear cuenta nueva' : 'Ir a iniciar sesión' }}
+    </button>
   </ng-template>
 </section>

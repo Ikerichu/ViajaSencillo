@@ -22,6 +22,12 @@ export interface UserResponse {
   email: string;
 }
 
+export interface LoginResponse {
+  access_token: string;
+  token_type: string;
+  user: UserResponse;
+}
+
 export interface SavedTripCreate extends PlannerRequest {
   itinerary: any[];
 }
@@ -54,11 +60,19 @@ export class ApiService {
     return this.http.post<UserResponse>(`${this.baseUrl}/users`, user);
   }
 
-  saveTrip(userId: number, trip: SavedTripCreate): Observable<any> {
-    return this.http.post(`${this.baseUrl}/users/${userId}/trips`, trip);
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, { email, password });
   }
 
-  getUserTrips(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/users/${userId}/trips`);
+  saveTrip(trip: SavedTripCreate, token: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users/me/trips`, trip, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  getUserTrips(token: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/users/me/trips`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   }
 }

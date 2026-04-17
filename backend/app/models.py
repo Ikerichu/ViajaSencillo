@@ -12,6 +12,7 @@ class User(Base):
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
+    session_token = Column(String, unique=True, index=True, nullable=True)
     trips = relationship("SavedTrip", back_populates="user")
 
 
