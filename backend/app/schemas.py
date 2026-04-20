@@ -27,6 +27,14 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
 
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+
+    class Config:
+        from_attributes = True
+
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
@@ -35,14 +43,6 @@ class LoginResponse(BaseModel):
     access_token: str
     token_type: str
     user: UserResponse
-
-class UserResponse(BaseModel):
-    id: int
-    name: str
-    email: EmailStr
-
-    class Config:
-        orm_mode = True
 
 class SavedTripCreate(BaseModel):
     destination: str
@@ -64,4 +64,4 @@ class SavedTripResponse(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True

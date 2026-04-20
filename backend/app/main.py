@@ -22,6 +22,7 @@ from .crud import (
     create_user,
     get_user,
     get_user_by_email,
+    logout_user,
 )
 from .auth import get_current_user
 from .database import engine, get_db
@@ -90,6 +91,11 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         "token_type": "bearer",
         "user": authenticated,
     }
+
+@app.post("/api/logout")
+def logout(current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    logout_user(db, current_user.id)
+    return {"message": "Sesión cerrada exitosamente"}
 
 @app.get("/api/users/me", response_model=UserResponse)
 def read_current_user(current_user=Depends(get_current_user)):

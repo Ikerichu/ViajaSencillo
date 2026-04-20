@@ -87,8 +87,25 @@ export class ProfileComponent implements OnInit {
   }
 
   logout() {
+    if (this.currentUser?.token) {
+      this.api.logout(this.currentUser.token).subscribe(
+        () => {
+          this.performLogout();
+        },
+        () => {
+          // Even if backend logout fails, clear local storage
+          this.performLogout();
+        }
+      );
+    } else {
+      this.performLogout();
+    }
+  }
+
+  private performLogout() {
     localStorage.removeItem('currentUser');
     this.currentUser = null;
     this.trips = [];
+    this.error = '';
   }
 }

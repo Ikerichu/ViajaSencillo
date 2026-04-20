@@ -75,4 +75,10 @@ export class ApiService {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
+
+  logout(token: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/logout`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
 }

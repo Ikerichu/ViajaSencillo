@@ -48,6 +48,16 @@ def authenticate_user(db: Session, email: str, password: str):
     return user
 
 
+def logout_user(db: Session, user_id: int):
+    user = get_user(db, user_id)
+    if user:
+        user.session_token = None
+        db.add(user)
+        db.commit()
+        return True
+    return False
+
+
 def create_saved_trip(db: Session, user_id: int, trip: schemas.SavedTripCreate) -> models.SavedTrip:
     db_trip = models.SavedTrip(
         user_id=user_id,
