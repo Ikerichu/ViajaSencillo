@@ -16,6 +16,11 @@ export interface UserCreate {
   password: string;
 }
 
+export interface UserUpdate {
+  name: string;
+  email: string;
+}
+
 export interface UserResponse {
   id: number;
   name: string;
@@ -78,6 +83,12 @@ export class ApiService {
 
   logout(token: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/logout`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  updateUser(user: UserUpdate, token: string): Observable<UserResponse> {
+    return this.http.put<UserResponse>(`${this.baseUrl}/users/me`, user, {
       headers: { Authorization: `Bearer ${token}` },
     });
   }

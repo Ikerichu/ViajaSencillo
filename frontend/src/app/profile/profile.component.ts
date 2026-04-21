@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService, LoginResponse, UserCreate } from '../services/api.service';
+import { ApiService, LoginResponse, UserCreate, UserUpdate } from '../services/api.service';
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +17,11 @@ export class ProfileComponent implements OnInit {
     email: '',
     password: '',
   };
+  editMode = false;
+  editForm: UserUpdate = {
+    name: '',
+    email: '',
+  };
 
   constructor(private api: ApiService) {}
 
@@ -26,6 +31,37 @@ export class ProfileComponent implements OnInit {
       this.currentUser = JSON.parse(user);
       this.fetchTrips();
     }
+  }
+
+  toggleEdit() {
+    this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.editForm = {
+        name: this.currentUser.name,
+        email: this.currentUser.email,
+      };
+    }
+    this.error = '';
+  }
+
+  saveProfile() {
+    if (!this.currentUser?.token) {
+      return;
+    }
+    this.loading = true;
+    this.error = '';
+    this.api.updateUser(this.editForm, this.currentUser.token).subscribe(
+      (updatedUser) => {
+        this.currentUser = { ...this.currentUser, ...updatedUser };
+        localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+        this.editMode = false;
+        this.loading = false;
+      },
+      (err) => {
+        this.error = err?.error?.detail || 'No se pudo actualizar el perfil';
+        this.loading = false;
+      },
+    );
   }
 
   fetchTrips() {

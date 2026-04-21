@@ -58,6 +58,22 @@ def logout_user(db: Session, user_id: int):
     return False
 
 
+def update_user(db: Session, user_id: int, user_update: schemas.UserUpdate):
+    user = get_user(db, user_id)
+    if not user:
+        return None
+    # Check if email is already taken by another user
+    existing_user = get_user_by_email(db, user_update.email)
+    if existing_user and existing_user.id != user_id:
+        return None
+    user.name = user_update.name
+    user.email = user_update.email
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
+
+
 def create_saved_trip(db: Session, user_id: int, trip: schemas.SavedTripCreate) -> models.SavedTrip:
     db_trip = models.SavedTrip(
         user_id=user_id,

@@ -2,6 +2,13 @@
 
 Aplicación inicial de Travel Planner Inteligente con frontend Angular y backend Python + FastAPI.
 
+## Características
+
+- **Planificación de viajes**: Genera itinerarios personalizados basados en destino, presupuesto y preferencias
+- **Autenticación completa**: Registro, login, logout y edición de perfil de usuario
+- **Gestión de viajes**: Guardar y consultar viajes planificados
+- **Base de datos**: Almacenamiento persistente con SQLite
+
 ## Estructura
 
 - `frontend/`: aplicación Angular SPA con rutas `/home`, `/planner`, `/results`, `/profile`
@@ -43,6 +50,7 @@ npm run start
 - `POST /api/login` inicia sesión con `email`, `password` y devuelve token Bearer.
 - `POST /api/logout` cierra sesión (requiere token Bearer).
 - `GET /api/users/me` obtiene datos del usuario actual (requiere token Bearer).
+- `PUT /api/users/me` actualiza el perfil del usuario actual (requiere token Bearer).
 - `POST /api/users/me/trips` guarda un viaje para el usuario actual (requiere token Bearer).
 - `GET /api/users/me/trips` lista viajes del usuario actual (requiere token Bearer).
 

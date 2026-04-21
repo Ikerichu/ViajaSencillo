@@ -11,6 +11,7 @@ from .schemas import (
     UserCreate,
     UserLogin,
     UserResponse,
+    UserUpdate,
     LoginResponse,
 )
 from .dataset import DESTINATIONS, get_places
@@ -23,6 +24,7 @@ from .crud import (
     get_user,
     get_user_by_email,
     logout_user,
+    update_user,
 )
 from .auth import get_current_user
 from .database import engine, get_db
@@ -100,6 +102,13 @@ def logout(current_user=Depends(get_current_user), db: Session = Depends(get_db)
 @app.get("/api/users/me", response_model=UserResponse)
 def read_current_user(current_user=Depends(get_current_user)):
     return current_user
+
+@app.put("/api/users/me", response_model=UserResponse)
+def update_current_user(user_update: UserUpdate, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    updated_user = update_user(db, current_user.id, user_update)
+    if not updated_user:
+        raise HTTPException(status_code=400, detail="Email ya está en uso por otro usuario")
+    return updated_user
 
 @app.post("/api/users/me/trips", response_model=SavedTripResponse)
 def save_trip(trip: SavedTripCreate, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
