@@ -8,6 +8,19 @@
       {{ result.savedMessage }}
     </div>
 
+    <div *ngIf="result.weather" class="weather-section">
+      <h3>Previsión del clima</h3>
+      <p><strong>Ubicación:</strong> {{ result.weather.location_name }}, {{ result.weather.country }}</p>
+      <p><strong>Zona horaria:</strong> {{ result.weather.timezone }}</p>
+      <div class="weather-forecast">
+        <div *ngFor="let day of result.weather.forecast" class="weather-day">
+          <p><strong>{{ day.date }}</strong></p>
+          <p>Máx: {{ day.temp_max }}°C | Mín: {{ day.temp_min }}°C</p>
+          <p>Precipitación: {{ day.precipitation }}mm</p>
+        </div>
+      </div>
+    </div>
+
     <div *ngFor="let day of result.itinerary" class="result-day">
       <h3>Día {{ day.day }}</h3>
       <ul>

@@ -13,9 +13,12 @@ from .schemas import (
     UserResponse,
     UserUpdate,
     LoginResponse,
+    WeatherInfo,
+    WeatherDay,
 )
 from .dataset import DESTINATIONS, get_places
 from .itinerary import make_itinerary
+from .weather import get_destination_weather
 from .crud import (
     authenticate_user,
     create_saved_trip,
@@ -58,7 +61,7 @@ def place_recommendations(destination: str, interests: str = ""):
     return places
 
 @app.post("/api/planner", response_model=PlannerResponse)
-def generate_planner(request: PlannerRequest):
+async def generate_planner(request: PlannerRequest):
     itinerary = make_itinerary(request)
     days = len(itinerary)
     daily_budget = round(request.budget / days, 2) if days else 0.0
@@ -67,6 +70,33 @@ def generate_planner(request: PlannerRequest):
     if total_cost > request.budget:
         notes.append("Advertencia: el itinerario estimado supera tu presupuesto.")
     notes.append("Se han agrupado actividades por cercanía y preferencias.")
+    
+    # Get weather information
+    weather_data = None
+    try:
+        weather_info = await get_destination_weather(request.destination, days)
+        if weather_info:
+            forecast = []
+            for i, date_str in enumerate(weather_info["weather"]["daily"].get("time", [])):
+                if i < days:
+                    forecast.append(WeatherDay(
+                        date=date_str,
+                        temp_max=weather_info["weather"]["daily"]["temperature_2m_max"][i],
+                        temp_min=weather_info["weather"]["daily"]["temperature_2m_min"][i],
+                        precipitation=weather_info["weather"]["daily"]["precipitation"][i],
+                        weather_code=weather_info["weather"]["daily"]["weather_code"][i],
+                    ))
+            
+            weather_data = WeatherInfo(
+                location_name=weather_info["location"]["name"],
+                country=weather_info["location"]["country"],
+                timezone=weather_info["weather"]["timezone"],
+                forecast=forecast,
+            )
+    except Exception as e:
+        print(f"Error fetching weather: {e}")
+        # Continue without weather data
+    
     return PlannerResponse(
         destination=request.destination,
         days=days,
@@ -74,6 +104,7 @@ def generate_planner(request: PlannerRequest):
         daily_budget=daily_budget,
         itinerary=itinerary,
         notes=notes,
+        weather=weather_data,
     )
 
 @app.post("/api/users", response_model=UserResponse)

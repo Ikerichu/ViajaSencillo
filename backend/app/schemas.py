@@ -14,6 +14,19 @@ class ItineraryDay(BaseModel):
     activities: List[str]
     estimated_cost: float
 
+class WeatherDay(BaseModel):
+    date: str
+    temp_max: float
+    temp_min: float
+    precipitation: float
+    weather_code: int
+
+class WeatherInfo(BaseModel):
+    location_name: str
+    country: str
+    timezone: str
+    forecast: List[WeatherDay]
+
 class PlannerResponse(BaseModel):
     destination: str
     days: int
@@ -21,6 +34,7 @@ class PlannerResponse(BaseModel):
     daily_budget: float
     itinerary: List[ItineraryDay]
     notes: List[str]
+    weather: WeatherInfo = None
 
 class UserCreate(BaseModel):
     name: str

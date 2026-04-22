@@ -5,3 +5,53 @@
 ul {
   padding-left: 1.2rem;
 }
+
+.weather-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.weather-section h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.weather-section p {
+  margin: 0.5rem 0;
+}
+
+.weather-forecast {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.weather-day {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.weather-day p {
+  margin: 0.4rem 0;
+  font-size: 0.9rem;
+}
+
+.weather-day strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.save-notice {
+  background: #d4edda;
+  color: #155724;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}

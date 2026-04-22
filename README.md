@@ -5,6 +5,7 @@ Aplicación inicial de Travel Planner Inteligente con frontend Angular y backend
 ## Características
 
 - **Planificación de viajes**: Genera itinerarios personalizados basados en destino, presupuesto y preferencias
+- **Previsión del clima**: Integración con Open-Meteo API para mostrar pronóstico meteorológico del destino
 - **Autenticación completa**: Registro, login, logout y edición de perfil de usuario
 - **Gestión de viajes**: Guardar y consultar viajes planificados
 - **Base de datos**: Almacenamiento persistente con SQLite
@@ -53,6 +54,15 @@ npm run start
 - `PUT /api/users/me` actualiza el perfil del usuario actual (requiere token Bearer).
 - `POST /api/users/me/trips` guarda un viaje para el usuario actual (requiere token Bearer).
 - `GET /api/users/me/trips` lista viajes del usuario actual (requiere token Bearer).
+
+## APIs Externas
+
+### Open-Meteo (Clima)
+La aplicación utiliza la **API Open-Meteo** para obtener información meteorológica de los destinos:
+- **URL**: https://api.open-meteo.com
+- **Características**: Geocodificación y pronóstico del clima de hasta 16 días
+- **Ventajas**: Gratis, sin API key requerida, datos precisos
+- **Integración**: Automática en el endpoint `POST /api/planner`
 
 ## Base de datos
 
