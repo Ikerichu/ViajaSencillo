@@ -64,6 +64,14 @@ La aplicación utiliza la **API Open-Meteo** para obtener información meteorol�
 - **Ventajas**: Gratis, sin API key requerida, datos precisos
 - **Integración**: Automática en el endpoint `POST /api/planner`
 
+### Open Trip Map (Atracciones y Puntos de Interés)
+La aplicación utiliza la **API Open Trip Map** para generar itinerarios con atracciones reales:
+- **URL**: https://api.opentripmap.com
+- **Características**: Más de 3 millones de puntos de interés (museos, restaurantes, naturaleza, etc.)
+- **Ventajas**: Gratis, sin API key requerida, datos reales filtrados por intereses
+- **Integración**: Automática en el endpoint `POST /api/planner`
+- **Fallback**: Si la API no está disponible, usa datos locales
+
 ## Base de datos
 
 La aplicación usa SQLite. La base de datos se crea automáticamente al iniciar el backend.

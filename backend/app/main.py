@@ -17,7 +17,7 @@ from .schemas import (
     WeatherDay,
 )
 from .dataset import DESTINATIONS, get_places
-from .itinerary import make_itinerary
+from .itinerary import make_itinerary, make_itinerary_with_real_attractions
 from .weather import get_destination_weather
 from .crud import (
     authenticate_user,
@@ -62,7 +62,7 @@ def place_recommendations(destination: str, interests: str = ""):
 
 @app.post("/api/planner", response_model=PlannerResponse)
 async def generate_planner(request: PlannerRequest):
-    itinerary = make_itinerary(request)
+    itinerary = await make_itinerary_with_real_attractions(request)
     days = len(itinerary)
     daily_budget = round(request.budget / days, 2) if days else 0.0
     total_cost = sum(day.estimated_cost for day in itinerary)

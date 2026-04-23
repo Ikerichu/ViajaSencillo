@@ -2,6 +2,7 @@ from datetime import timedelta
 from typing import List
 
 from .dataset import get_places
+from .attractions import get_attractions_by_interests, format_attraction_for_itinerary, estimate_attraction_cost
 from .schemas import PlannerRequest, ItineraryDay
 
 PRICE_OVERRIDES = {
@@ -24,7 +25,50 @@ def estimate_activity_cost(place: dict) -> float:
     return float(base + 5)
 
 
+async def make_itinerary_with_real_attractions(request: PlannerRequest) -> List[ItineraryDay]:
+    """
+    Generate itinerary using real attractions from Open Trip Map API.
+    Falls back to dataset if API fails.
+    """
+    days = (request.end_date - request.start_date).days + 1
+    if days < 1:
+        days = 1
+
+    # Try to get real attractions from API
+    try:
+        attractions = await get_attractions_by_interests(request.destination, request.interests, limit=days * 4)
+        
+        if attractions:
+            itinerary = []
+            attraction_index = 0
+            
+            for day_number in range(1, days + 1):
+                activities = []
+                estimated_cost = 0.0
+                slots = 3
+                
+                for _ in range(slots):
+                    if attraction_index >= len(attractions):
+                        attraction_index = 0
+                    
+                    attraction = attractions[attraction_index]
+                    activities.append(format_attraction_for_itinerary(attraction))
+                    estimated_cost += estimate_attraction_cost(attraction)
+                    attraction_index += 1
+                
+                itinerary.append(ItineraryDay(day=day_number, activities=activities, estimated_cost=round(estimated_cost, 2)))
+            
+            return itinerary
+    except Exception as e:
+        print(f"Error generating itinerary with attractions API: {e}")
+        # Fall back to dataset-based itinerary
+    
+    # Fallback to dataset-based itinerary
+    return make_itinerary(request)
+
+
 def make_itinerary(request: PlannerRequest) -> List[ItineraryDay]:
+    """Fallback: Generate itinerary using local dataset."""
     days = (request.end_date - request.start_date).days + 1
     if days < 1:
         days = 1
