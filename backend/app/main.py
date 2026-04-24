@@ -15,10 +15,13 @@ from .schemas import (
     LoginResponse,
     WeatherInfo,
     WeatherDay,
+    ChatMessageResponse,
+    ChatRequest,
 )
 from .dataset import DESTINATIONS, get_places
 from .itinerary import make_itinerary, make_itinerary_with_real_attractions
 from .weather import get_destination_weather
+from .chat import chat_with_travel_assistant
 from .crud import (
     authenticate_user,
     create_saved_trip,
@@ -28,6 +31,8 @@ from .crud import (
     get_user_by_email,
     logout_user,
     update_user,
+    create_chat_message,
+    get_chat_history,
 )
 from .auth import get_current_user
 from .database import engine, get_db
@@ -153,3 +158,48 @@ def read_saved_trips(
     db: Session = Depends(get_db),
 ):
     return get_saved_trips(db, user_id=current_user.id, skip=skip, limit=limit)
+
+
+@app.post("/api/chat")
+async def chat_endpoint(request: ChatRequest, current_user=Depends(get_current_user), db: Session = Depends(get_db)):
+    """
+    Send a message to the travel planning AI assistant.
+    
+    Returns the assistant's response and saves the conversation to database.
+    """
+    if not request.message or not request.message.strip():
+        raise HTTPException(status_code=400, detail="El mensaje no puede estar vacío")
+    
+    # Get chat history for context (last 20 messages)
+    chat_history = get_chat_history(db, current_user.id, limit=20)
+    
+    # Convert to format expected by chat function
+    messages = [
+        {
+            "role": msg.role,
+            "content": msg.content
+        }
+        for msg in chat_history
+    ]
+    
+    # Get AI response
+    ai_response = await chat_with_travel_assistant(request.message, messages)
+    
+    # Save user message and AI response to database
+    create_chat_message(db, current_user.id, "user", request.message)
+    create_chat_message(db, current_user.id, "assistant", ai_response)
+    
+    return {
+        "message": ai_response,
+        "role": "assistant"
+    }
+
+
+@app.get("/api/chat/history", response_model=List[ChatMessageResponse])
+async def get_chat_history_endpoint(
+    limit: int = 50,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Get chat history for the current user."""
+    return get_chat_history(db, current_user.id, limit=limit)

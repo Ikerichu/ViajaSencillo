@@ -6,9 +6,12 @@ Aplicación inicial de Travel Planner Inteligente con frontend Angular y backend
 
 - **Planificación de viajes**: Genera itinerarios personalizados basados en destino, presupuesto y preferencias
 - **Previsión del clima**: Integración con Open-Meteo API para mostrar pronóstico meteorológico del destino
+- **Atracciones reales**: Utiliza Open Trip Map para mostrar puntos de interés reales con ubicación exacta
+- **Asistente IA**: Chat con inteligencia artificial (Mistral-7B) para responder preguntas sobre viajes
 - **Autenticación completa**: Registro, login, logout y edición de perfil de usuario
 - **Gestión de viajes**: Guardar y consultar viajes planificados
 - **Base de datos**: Almacenamiento persistente con SQLite
+- **Historial de chat**: Guarda todas las conversaciones del usuario
 
 ## Estructura
 
@@ -55,6 +58,10 @@ npm run start
 - `POST /api/users/me/trips` guarda un viaje para el usuario actual (requiere token Bearer).
 - `GET /api/users/me/trips` lista viajes del usuario actual (requiere token Bearer).
 
+### Chat IA
+- `POST /api/chat` envía un mensaje al asistente IA y obtiene respuesta (requiere token Bearer).
+- `GET /api/chat/history` obtiene el historial de chat del usuario (requiere token Bearer).
+
 ## APIs Externas
 
 ### Open-Meteo (Clima)
@@ -71,6 +78,27 @@ La aplicación utiliza la **API Open Trip Map** para generar itinerarios con atr
 - **Ventajas**: Gratis, sin API key requerida, datos reales filtrados por intereses
 - **Integración**: Automática en el endpoint `POST /api/planner`
 - **Fallback**: Si la API no está disponible, usa datos locales
+
+### Hugging Face (Chat IA)
+La aplicación utiliza la **API Hugging Face** para proporcionar un asistente de viajes con IA:
+- **URL**: https://api-inference.huggingface.co
+- **Modelo**: Mistral-7B-Instruct (modelo gratuito y potente)
+- **Características**: Responde preguntas sobre viajes, destinos, presupuestos, actividades
+- **Configuración**: Requiere configurar la variable de entorno `HF_TOKEN`
+  
+#### Obtener tu HF_TOKEN:
+1. Ve a https://huggingface.co/settings/tokens
+2. Crea un nuevo token (acceso de lectura es suficiente)
+3. Configura la variable de entorno antes de iniciar el backend:
+   ```bash
+   export HF_TOKEN="tu_token_aqui"
+   python3 -m uvicorn app.main:app --reload
+   ```
+   O en Windows:
+   ```cmd
+   set HF_TOKEN=tu_token_aqui
+   python3 -m uvicorn app.main:app --reload
+   ```
 
 ## Base de datos
 

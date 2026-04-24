@@ -92,4 +92,18 @@ export class ApiService {
       headers: { Authorization: `Bearer ${token}` },
     });
   }
+
+  sendChatMessage(message: string, token: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/chat`, { message }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  getChatHistory(token: string, limit: number = 50): Observable<any[]> {
+    let params = new HttpParams().set('limit', limit.toString());
+    return this.http.get<any[]>(`${this.baseUrl}/chat/history`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params,
+    });
+  }
 }

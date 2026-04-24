@@ -83,3 +83,22 @@ class SavedTripResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class ChatMessageCreate(BaseModel):
+    content: str
+
+
+class ChatMessageResponse(BaseModel):
+    id: int
+    user_id: int
+    role: str
+    content: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ChatRequest(BaseModel):
+    message: str

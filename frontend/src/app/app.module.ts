@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { PlannerComponent } from './planner/planner.component';
 import { ResultsComponent } from './results/results.component';
 import { ProfileComponent } from './profile/profile.component';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ProfileComponent } from './profile/profile.component';
     PlannerComponent,
     ResultsComponent,
     ProfileComponent,
+    ChatComponent,
   ],
   imports: [BrowserModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [],

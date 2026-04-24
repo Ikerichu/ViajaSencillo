@@ -1,0 +1,44 @@
+<section class="card chat-container">
+  <div *ngIf="currentUser; else authRequired">
+    <h2>💬 Asistente de Viajes IA</h2>
+    <p class="description">Pregunta sobre destinos, presupuestos, actividades y más.</p>
+
+    <div class="messages-container">
+      <div *ngIf="messages.length === 0" class="empty-state">
+        <p>Inicia una conversación con nuestro asistente de viajes impulsado por IA.</p>
+      </div>
+
+      <div *ngFor="let msg of messages" [class]="'message message-' + msg.role">
+        <p>{{ msg.content }}</p>
+        <small>{{ msg.created_at | date:'short' }}</small>
+      </div>
+
+      <div *ngIf="loading" class="message message-assistant">
+        <p class="typing-indicator">
+          <span></span><span></span><span></span>
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="error" class="error-message">
+      ⚠️ {{ error }}
+    </div>
+
+    <div class="input-container">
+      <textarea
+        [(ngModel)]="userMessage"
+        (keypress)="handleKeyPress($event)"
+        placeholder="Escribe tu pregunta aquí..."
+        [disabled]="loading"
+        rows="3"
+      ></textarea>
+      <button (click)="sendMessage()" [disabled]="loading || !userMessage.trim()">
+        {{ loading ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </div>
+  </div>
+
+  <ng-template #authRequired>
+    <p>Debes <a routerLink="/profile">iniciar sesión</a> para usar el chat con IA.</p>
+  </ng-template>
+</section>
