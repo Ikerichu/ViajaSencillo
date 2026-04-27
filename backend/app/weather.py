@@ -1,5 +1,6 @@
 import httpx
 from typing import Optional, Dict, Any
+from datetime import datetime, timedelta
 
 WEATHER_API_BASE_URL = "https://api.open-meteo.com/v1/forecast"
 GEOCODING_API_URL = "https://geocoding-api.open-meteo.com/v1/search"
@@ -25,7 +26,7 @@ async def get_coordinates(city: str) -> Optional[Dict[str, Any]]:
                     "language": "es",
                     "format": "json"
                 },
-                timeout=5.0
+                timeout=30.0
             )
             response.raise_for_status()
             data = response.json()
@@ -40,7 +41,8 @@ async def get_coordinates(city: str) -> Optional[Dict[str, Any]]:
                 }
             return None
     except Exception as e:
-        print(f"Error getting coordinates: {e}")
+        import sys
+        print(f"Error getting coordinates: {type(e).__name__}: {e}", file=sys.stderr)
         return None
 
 
@@ -58,23 +60,24 @@ async def get_weather(latitude: float, longitude: float, days: int = 7) -> Optio
     """
     try:
         async with httpx.AsyncClient() as client:
+            # Open-Meteo API parameters
+            params = {
+                "latitude": latitude,
+                "longitude": longitude,
+                "daily": "temperature_2m_max,temperature_2m_min,precipitation_sum",
+                "temperature_unit": "celsius"
+            }
+            
             response = await client.get(
                 WEATHER_API_BASE_URL,
-                params={
-                    "latitude": latitude,
-                    "longitude": longitude,
-                    "daily": "temperature_2m_max,temperature_2m_min,precipitation,weather_code",
-                    "temperature_unit": "celsius",
-                    "timezone": "auto",
-                    "forecast_days": min(days, 16)  # Open-Meteo free tier supports up to 16 days
-                },
-                timeout=5.0
+                params=params,
+                timeout=30.0
             )
             response.raise_for_status()
             data = response.json()
             
             return {
-                "timezone": data.get("timezone"),
+                "timezone": data.get("timezone", "UTC"),
                 "daily": data.get("daily", {}),
             }
     except Exception as e:
