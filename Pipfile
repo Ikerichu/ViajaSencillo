@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "==0.104.0"
+uvicorn = {extras = ["standard"], version = "==0.23.2"}
+pydantic = "==2.8.0"
+sqlalchemy = "==2.0.23"
+httpx = "==0.25.2"
+python-dotenv = "==1.0.0"
+email-validator = "==2.3.0"
+
+[dev-packages]
+
+[scripts]
+start = "python3 scripts/start-services.py"
+backend = "python3 scripts/backend.py"
+frontend = "python3 scripts/frontend.py"
+test = "python3 scripts/test.py"
+verify = "python3 verify_project.py"
+
+[requires]
+python_version = "3.12"
