@@ -10,6 +10,8 @@ import os
 import time
 import signal
 import socket
+import urllib.request
+import urllib.error
 from pathlib import Path
 import threading
 
@@ -106,6 +108,29 @@ def check_command(cmd):
     except:
         return False
 
+
+def wait_for_http(url, timeout=30, expect_text=None):
+    """Wait until an HTTP endpoint returns a successful response."""
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            with urllib.request.urlopen(url, timeout=5) as response:
+                if response.status == 200:
+                    if expect_text:
+                        body = response.read().decode('utf-8', errors='ignore')
+                        if expect_text in body:
+                            return True
+                    else:
+                        return True
+        except urllib.error.HTTPError as exc:
+            if exc.code >= 400:
+                pass
+        except Exception:
+            pass
+        time.sleep(1)
+    return False
+
+
 def start_backend():
     """Start FastAPI backend"""
     global backend_process
@@ -138,6 +163,11 @@ def start_backend():
         print_status(f"Backend started (PID: {backend_process.pid})")
         print_status("Backend available at: http://localhost:8000")
         print_status("Swagger UI: http://localhost:8000/docs")
+
+        if not wait_for_http("http://127.0.0.1:8000/docs", timeout=20):
+            print_error("Backend did not become ready in time")
+            return False
+
         return True
         
     except Exception as e:
@@ -172,6 +202,12 @@ def start_frontend():
         
         print_status(f"Frontend started (PID: {frontend_process.pid})")
         print_status("Frontend available at: http://localhost:4200")
+
+        if not wait_for_http("http://localhost:4200", timeout=45, expect_text="ViajaSencillo"):
+            print_error("Frontend did not become available or did not render the app page in time")
+            return False
+
+        print_status("Frontend page is available")
         return True
         
     except Exception as e:
