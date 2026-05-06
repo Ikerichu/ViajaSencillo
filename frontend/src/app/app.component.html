@@ -4,10 +4,25 @@
     <a routerLink="/home" routerLinkActive="active">Inicio</a>
     <a routerLink="/planner" routerLinkActive="active">Planner</a>
     <a routerLink="/results" routerLinkActive="active">Resultados</a>
-    <a routerLink="/chat" routerLinkActive="active">💬 Chat IA</a>
     <a routerLink="/profile" routerLinkActive="active">Perfil</a>
   </nav>
 </header>
 <div class="container">
   <router-outlet></router-outlet>
 </div>
+
+<!-- Floating Chat Bubble -->
+<div *ngIf="isChatOpen" class="chat-bubble-container" [@slideUp]>
+  <div class="chat-header">
+    <h3>💬 Asistente IA</h3>
+    <button class="chat-close-btn" (click)="toggleChat()">✕</button>
+  </div>
+  <app-chat [isFloating]="true"></app-chat>
+</div>
+<button 
+  *ngIf="!isChatOpen"
+  class="chat-bubble-trigger" 
+  (click)="toggleChat()"
+  title="Abrir chat con IA">
+  💬
+</button>

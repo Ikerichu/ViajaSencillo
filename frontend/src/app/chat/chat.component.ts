@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApiService } from '../services/api.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { ApiService } from '../services/api.service';
   styleUrls: ['./chat.component.css'],
 })
 export class ChatComponent implements OnInit {
+  @Input() isFloating: boolean = false;
+
   currentUser: any = null;
   messages: any[] = [];
   loading = false;
@@ -81,5 +83,9 @@ export class ChatComponent implements OnInit {
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  closeChat() {
+    this.userMessage = '';
   }
 }

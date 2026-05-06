@@ -1,16 +1,18 @@
-<section class="card chat-container">
-  <div *ngIf="currentUser; else authRequired">
-    <h2>💬 Asistente de Viajes IA</h2>
-    <p class="description">Pregunta sobre destinos, presupuestos, actividades y más.</p>
+<div [class.floating-chat]="isFloating">
+  <div *ngIf="currentUser; else authRequired" class="chat-content">
+    <div *ngIf="!isFloating" class="card chat-container">
+      <h2>💬 Asistente de Viajes IA</h2>
+      <p class="description">Pregunta sobre destinos, presupuestos, actividades y más.</p>
+    </div>
 
-    <div class="messages-container">
-      <div *ngIf="messages.length === 0" class="empty-state">
+    <div [class]="isFloating ? 'messages-floating' : 'messages-container'">
+      <div *ngIf="messages.length === 0 && !isFloating" class="empty-state">
         <p>Inicia una conversación con nuestro asistente de viajes impulsado por IA.</p>
       </div>
 
       <div *ngFor="let msg of messages" [class]="'message message-' + msg.role">
         <p>{{ msg.content }}</p>
-        <small>{{ msg.created_at | date:'short' }}</small>
+        <small *ngIf="!isFloating">{{ msg.created_at | date:'short' }}</small>
       </div>
 
       <div *ngIf="loading" class="message message-assistant">
@@ -24,21 +26,24 @@
       ⚠️ {{ error }}
     </div>
 
-    <div class="input-container">
+    <div class="input-container" [class.floating-input]="isFloating">
       <textarea
         [(ngModel)]="userMessage"
         (keypress)="handleKeyPress($event)"
-        placeholder="Escribe tu pregunta aquí..."
+        [placeholder]="isFloating ? 'Escribe aquí...' : 'Escribe tu pregunta aquí...'"
         [disabled]="loading"
-        rows="3"
+        [rows]="isFloating ? 2 : 3"
       ></textarea>
-      <button (click)="sendMessage()" [disabled]="loading || !userMessage.trim()">
-        {{ loading ? 'Enviando...' : 'Enviar' }}
+      <button (click)="sendMessage()" [disabled]="loading || !userMessage.trim()" class="send-btn">
+        <span *ngIf="!loading">📤</span>
+        <span *ngIf="loading">⏳</span>
       </button>
     </div>
   </div>
 
   <ng-template #authRequired>
-    <p>Debes <a routerLink="/profile">iniciar sesión</a> para usar el chat con IA.</p>
+    <div class="auth-required">
+      <p>Debes <a routerLink="/profile" (click)="closeChat()">iniciar sesión</a> para usar el chat con IA.</p>
+    </div>
   </ng-template>
-</section>
+</div>
