@@ -11,6 +11,24 @@ header h1 {
   font-size: 1.5rem;
 }
 
+.brand-link {
+  color: white;
+  text-decoration: none;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.brand-link:hover,
+.brand-link.active {
+  background: rgba(255, 255, 255, 0.32);
+  color: #1e293b;
+}
+
 nav {
   display: flex;
   gap: 0.75rem;
