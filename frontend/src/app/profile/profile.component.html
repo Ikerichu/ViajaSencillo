@@ -1,64 +1,136 @@
-<section class="card">
-  <h2>Perfil</h2>
+<section class="card profile-card">
+  <div class="profile-header">
+    <h2>Mi Perfil</h2>
+  </div>
 
-  <div *ngIf="currentUser; else authForm">
-    <div *ngIf="!editMode">
-      <p>Bienvenido, <strong>{{ currentUser.name }}</strong> (<em>{{ currentUser.email }}</em>)</p>
-      <button type="button" (click)="toggleEdit()">Editar perfil</button>
-      <button type="button" (click)="logout()">Cerrar sesión</button>
+  <div *ngIf="currentUser; else authForm" class="profile-content">
+    <div *ngIf="!editMode" class="profile-view">
+      <div class="user-info">
+        <div class="info-item">
+          <span class="label">Nombre</span>
+          <p class="value">{{ currentUser.name }}</p>
+        </div>
+        <div class="info-item">
+          <span class="label">Email</span>
+          <p class="value">{{ currentUser.email }}</p>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn-primary" (click)="toggleEdit()">✏️ Editar perfil</button>
+        <button type="button" class="btn-danger" (click)="logout()">🚪 Cerrar sesión</button>
+      </div>
     </div>
 
-    <div *ngIf="editMode">
+    <div *ngIf="editMode" class="profile-edit">
       <h3>Editar perfil</h3>
-      <form (ngSubmit)="saveProfile()">
-        <label>
-          Nombre
-          <input [(ngModel)]="editForm.name" name="editName" required />
-        </label>
-        <label>
-          Email
-          <input [(ngModel)]="editForm.email" name="editEmail" type="email" required />
-        </label>
-        <button type="submit" [disabled]="loading">Guardar cambios</button>
-        <button type="button" (click)="toggleEdit()">Cancelar</button>
+      <form (ngSubmit)="saveProfile()" class="edit-form">
+        <div class="form-group">
+          <label for="editName">Nombre</label>
+          <input 
+            id="editName"
+            [(ngModel)]="editForm.name" 
+            name="editName" 
+            type="text"
+            required 
+            placeholder="Tu nombre completo"
+          />
+        </div>
+        <div class="form-group">
+          <label for="editEmail">Email</label>
+          <input 
+            id="editEmail"
+            [(ngModel)]="editForm.email" 
+            name="editEmail" 
+            type="email" 
+            required
+            placeholder="tu@email.com"
+          />
+        </div>
+
+        <div class="button-group edit-buttons">
+          <button type="submit" [disabled]="loading" class="btn-primary">💾 Guardar cambios</button>
+          <button type="button" (click)="toggleEdit()" class="btn-secondary">✕ Cancelar</button>
+        </div>
       </form>
-      <p *ngIf="error" class="error">{{ error }}</p>
+      <p *ngIf="error" class="error-message">{{ error }}</p>
     </div>
 
     <section class="saved-trips">
-      <h3>Viajes guardados</h3>
-      <p *ngIf="loading">Cargando viajes...</p>
-      <p *ngIf="!loading && error" class="error">{{ error }}</p>
-      <ul *ngIf="!loading && trips.length">
-        <li *ngFor="let trip of trips">{{ trip.destination }} - {{ trip.days }} días</li>
-      </ul>
-      <p *ngIf="!loading && !trips.length && !error">No hay viajes guardados todavía.</p>
+      <h3>📍 Viajes guardados</h3>
+      <div class="trips-container">
+        <p *ngIf="loading" class="loading-message">Cargando viajes...</p>
+        <p *ngIf="!loading && error" class="error-message">{{ error }}</p>
+        <div *ngIf="!loading && trips.length" class="trips-list">
+          <article class="trip-card" *ngFor="let trip of trips">
+            <h4>{{ trip.destination }}</h4>
+            <p class="trip-duration">{{ trip.days }} días</p>
+          </article>
+        </div>
+        <p *ngIf="!loading && !trips.length && !error" class="empty-state">No hay viajes guardados todavía. ¡Crea uno!</p>
+      </div>
     </section>
   </div>
 
   <ng-template #authForm>
-    <p *ngIf="authMode === 'login'">Inicia sesión para guardar tus viajes y verlos en tu perfil.</p>
-    <p *ngIf="authMode === 'register'">Regístrate para crear tu cuenta y comenzar a guardar viajes.</p>
-    <form (ngSubmit)="submit()">
-      <label *ngIf="authMode === 'register'">
-        Nombre
-        <input [(ngModel)]="userForm.name" name="name" required />
-      </label>
-      <label>
-        Email
-        <input [(ngModel)]="userForm.email" name="email" type="email" required />
-      </label>
-      <label>
-        Contraseña
-        <input [(ngModel)]="userForm.password" name="password" type="password" required />
-      </label>
-      <button type="submit" [disabled]="loading">
-        {{ authMode === 'login' ? 'Iniciar sesión' : 'Registrarse' }}
-      </button>
-      <p *ngIf="error" class="error">{{ error }}</p>
-    </form>
-    <button type="button" (click)="toggleMode()">
-      {{ authMode === 'login' ? 'Crear cuenta nueva' : 'Ir a iniciar sesión' }}
-    </button>
+    <div class="auth-content">
+      <div class="auth-header">
+        <h3 *ngIf="authMode === 'login'">Inicia sesión</h3>
+        <h3 *ngIf="authMode === 'register'">Crea tu cuenta</h3>
+        <p class="auth-subtitle" *ngIf="authMode === 'login'">Accede para guardar tus viajes favoritos</p>
+        <p class="auth-subtitle" *ngIf="authMode === 'register'">Únete a ViajaSencillo y comienza a planificar</p>
+      </div>
+
+      <form (ngSubmit)="submit()" class="auth-form">
+        <div class="form-group" *ngIf="authMode === 'register'">
+          <label for="inputName">Nombre completo</label>
+          <input 
+            id="inputName"
+            [(ngModel)]="userForm.name" 
+            name="name" 
+            type="text"
+            required 
+            placeholder="Tu nombre"
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email</label>
+          <input 
+            id="inputEmail"
+            [(ngModel)]="userForm.email" 
+            name="email" 
+            type="email" 
+            required
+            placeholder="tu@email.com"
+          />
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">Contraseña</label>
+          <input 
+            id="inputPassword"
+            [(ngModel)]="userForm.password" 
+            name="password" 
+            type="password" 
+            required
+            placeholder="••••••••"
+          />
+        </div>
+
+        <button type="submit" [disabled]="loading" class="btn-primary btn-full">
+          {{ authMode === 'login' ? '🔓 Iniciar sesión' : '✨ Crear cuenta' }}
+        </button>
+      </form>
+
+      <p *ngIf="error" class="error-message">{{ error }}</p>
+
+      <div class="auth-toggle">
+        <p class="toggle-text">
+          {{ authMode === 'login' ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?' }}
+        </p>
+        <button type="button" class="btn-link" (click)="toggleMode()">
+          {{ authMode === 'login' ? 'Crear cuenta nueva' : 'Ir a iniciar sesión' }}
+        </button>
+      </div>
+    </div>
   </ng-template>
 </section>
