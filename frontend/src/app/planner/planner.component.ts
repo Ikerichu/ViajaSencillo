@@ -21,6 +21,7 @@ export class PlannerComponent implements OnInit {
   destinations: string[] = [];
   loading = false;
   error = '';
+  success = '';
 
   constructor(private api: ApiService, private router: Router) {}
 
