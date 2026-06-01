@@ -1,6 +1,7 @@
 .planner-card {
   max-width: 750px;
   margin: 0 auto;
+  border-radius: var(--radius);
 }
 
 .planner-header {
@@ -95,7 +96,7 @@ select:focus {
 .interests-section {
   background: rgba(124, 58, 237, 0.04);
   padding: 1.5rem;
-  border-radius: 14px;
+  border-radius: 10px;
   border: 1px solid rgba(124, 58, 237, 0.08);
 }
 
@@ -154,8 +155,8 @@ select:focus {
   background: var(--primary);
   color: white;
   border: none;
-  padding: 1rem 2.5rem;
-  border-radius: 12px;
+  padding: 1rem 2.25rem;
+  border-radius: 10px;
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;

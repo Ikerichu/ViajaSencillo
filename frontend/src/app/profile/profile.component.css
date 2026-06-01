@@ -1,6 +1,7 @@
 .profile-card {
   max-width: 700px;
   margin: 0 auto;
+  border-radius: var(--radius);
 }
 
 .profile-header {
@@ -206,10 +207,10 @@ button {
 .trip-card {
   background: rgba(124, 58, 237, 0.08);
   padding: 1.2rem;
-  border-radius: 14px;
+  border-radius: 10px;
   border: 1px solid rgba(124, 58, 237, 0.15);
   text-align: center;
-  transition: all 0.25s ease;
+  transition: all 0.22s ease;
 }
 
 .trip-card:hover {
