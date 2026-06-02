@@ -7,7 +7,7 @@
 .profile-header {
   margin-bottom: 0;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid rgba(124, 58, 237, 0.1);
+  border-bottom: 2px solid rgba(37, 99, 235, 0.1);
 }
 
 .profile-header h2 {
@@ -41,7 +41,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #7c3aed;
+  color: var(--primary);
 }
 
 .info-item .value {
@@ -82,14 +82,14 @@ button {
 .btn-primary {
   background: var(--primary);
   color: white;
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
   flex: 1;
   min-width: 140px;
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.25);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.25);
 }
 
 .btn-primary:disabled {
@@ -98,14 +98,14 @@ button {
 }
 
 .btn-secondary {
-  background: rgba(124, 58, 237, 0.1);
-  color: #7c3aed;
+  background: rgba(236, 72, 153, 0.1);
+  color: #ec4899;
   flex: 1;
   min-width: 140px;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: rgba(124, 58, 237, 0.15);
+  background: rgba(236, 72, 153, 0.15);
 }
 
 .btn-danger {
@@ -127,7 +127,7 @@ button {
 
 .btn-link {
   background: none;
-  color: #7c3aed;
+  color: #2563eb;
   padding: 0.5rem 0;
   text-decoration: underline;
   box-shadow: none;
@@ -162,12 +162,12 @@ button {
 
 .form-group input {
   padding: 0.85rem 1rem;
-  border: 1.5px solid #7c3aed;
+  border: 1.5px solid #2563eb;
   border-radius: 10px;
   font-size: 1rem;
   font-family: inherit;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
-  background: rgba(124, 58, 237, 0.01);
+  background: rgba(37, 99, 235, 0.01);
 }
 
 .form-group input::placeholder {
@@ -176,15 +176,15 @@ button {
 
 .form-group input:focus {
   outline: none;
-  border-color: #06b6d4;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
   background: white;
 }
 
 /* Saved Trips */
 .saved-trips {
   padding-top: 2rem;
-  border-top: 2px solid rgba(124, 58, 237, 0.1);
+  border-top: 2px solid rgba(37, 99, 235, 0.1);
 }
 
 .saved-trips h3 {
@@ -205,18 +205,18 @@ button {
 }
 
 .trip-card {
-  background: rgba(124, 58, 237, 0.08);
+  background: rgba(37, 99, 235, 0.08);
   padding: 1.2rem;
   border-radius: 10px;
-  border: 1px solid rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(37, 99, 235, 0.15);
   text-align: center;
   transition: all 0.22s ease;
 }
 
 .trip-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.12);
-  border-color: #7c3aed;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+  border-color: #2563eb;
 }
 
 .trip-card h4 {
@@ -228,7 +228,7 @@ button {
 .trip-duration {
   margin: 0;
   font-size: 0.9rem;
-  color: #7c3aed;
+  color: #2563eb;
   font-weight: 600;
 }
 
@@ -258,7 +258,7 @@ button {
 .auth-toggle {
   text-align: center;
   padding-top: 1rem;
-  border-top: 1px solid rgba(124, 58, 237, 0.08);
+  border-top: 1px solid rgba(37, 99, 235, 0.08);
 }
 
 .toggle-text {
@@ -286,7 +286,7 @@ button {
   text-align: center;
   color: #475569;
   padding: 2rem 1rem;
-  background: rgba(124, 58, 237, 0.04);
+  background: rgba(37, 99, 235, 0.04);
   border-radius: 12px;
   margin: 0;
 }

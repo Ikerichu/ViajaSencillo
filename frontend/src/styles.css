@@ -1,13 +1,13 @@
 :root {
-  --bg: #f8fafc;
-  --bg-alt: #eef2ff;
-  --surface: rgba(255, 255, 255, 0.95);
+  --bg: #f3f7fb;
+  --bg-alt: #e8eff7;
+  --surface: rgba(255, 255, 255, 0.96);
   --surface-strong: #ffffff;
-  --text: #0f172a;
+  --text: #102a43;
   --muted: #475569;
-  --primary: #7c3aed;
-  --secondary: #06b6d4;
-  --accent: #10b981;
+  --primary: #2563eb;
+  --secondary: #ec4899;
+  --accent: #14b8a6;
   --shadow: 0 8px 30px rgba(31, 41, 55, 0.06);
   --radius: 12px;
 }
@@ -86,12 +86,12 @@ nav a.active,
 .brand-link.active {
   background: white;
   color: var(--text);
-  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.12);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
 }
 
 nav a:focus-visible,
 .brand-link:focus-visible {
-  outline: 3px solid rgba(16, 185, 129, 0.45);
+  outline: 3px solid rgba(20, 184, 166, 0.45);
   outline-offset: 3px;
 }
 
@@ -108,12 +108,12 @@ nav a:focus-visible,
   padding: 2rem;
   margin-bottom: 1.75rem;
   transition: transform 0.22s ease, box-shadow 0.22s ease;
-  border: 1px solid rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 24px 60px rgba(124, 58, 237, 0.12);
+  box-shadow: 0 24px 60px rgba(37, 99, 235, 0.12);
 }
 
 button {
@@ -126,12 +126,12 @@ button {
   font-weight: 700;
   letter-spacing: 0.01em;
   transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.12);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
 }
 
 button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(124, 58, 237, 0.14);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.14);
 }
 
 /* Accessible focus styles */
@@ -139,7 +139,7 @@ a:focus-visible,
 button:focus-visible,
 .brand-link:focus-visible,
 nav a:focus-visible {
-  outline: 3px solid rgba(6, 182, 212, 0.25);
+  outline: 3px solid rgba(20, 184, 166, 0.25);
   outline-offset: 3px;
 }
 
@@ -186,14 +186,14 @@ ul {
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  box-shadow: 0 18px 42px rgba(124, 58, 237, 0.3);
+  box-shadow: 0 18px 42px rgba(37, 99, 235, 0.3);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   z-index: 998;
 }
 
 .chat-bubble-trigger:hover {
   transform: scale(1.05);
-  box-shadow: 0 20px 48px rgba(124, 58, 237, 0.36);
+  box-shadow: 0 20px 48px rgba(37, 99, 235, 0.36);
 }
 
 .chat-bubble-trigger.active {

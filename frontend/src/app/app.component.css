@@ -61,6 +61,6 @@ nav a.active {
 }
 
 nav a:focus-visible {
-  outline: 3px solid rgba(16, 185, 129, 0.6);
+  outline: 3px solid rgba(20, 184, 166, 0.6);
   outline-offset: 2px;
 }
