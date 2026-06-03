@@ -156,10 +156,6 @@ section {
   color: #b00020;
 }
 
-button {
-  margin-top: 1rem;
-}
-
 @media (max-width: 960px) {
   .hero {
     grid-template-columns: 1fr;
